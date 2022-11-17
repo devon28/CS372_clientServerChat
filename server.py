@@ -8,6 +8,14 @@
 
 class Server():
     """server class holds instance of server to connect with Client() class"""
+
+    def __init__(self):
+        self.instructions = "In this game the serverside decides on a person place thing or other" + "\n" + \
+                            "accepted target. The server enters this object when prompted to start the" + "\n" + \
+                            "game and it is the client sides job to guess what the thing is. The client can \n" + "\n" + \
+                            "ask up to 20 questions/guesses. When you think you know the answer enter it as \n" + "\n" + \
+                            "the only word without any punctuation."
+
     def server(self):
         """binds to port and local host then communicates back and forth with
         client in a game of 20 questions where the client must guess an object
@@ -20,14 +28,16 @@ class Server():
             socket.listen()
             connection, address = socket.accept()
             print(f"Connected by {address}")
-            print("welcome to 20 questions, as the server you'll choose an \
-            object the client must guess!")
-            goal = input("what will the client try to guess?\n")  # string to guess
+            print("welcome to 20 questions!")
+            print(self.instructions)
+            print("As the server you'll choose an object the client must guess!")
+            goal = input("what will the client try to guess? \n")  # string to guess
             goal = bytes(goal, 'utf-8')
             print("Lets begin!")
+            print("------------------------------------------------------------------------------")
             print("on your turn enter /q to quit")
             guesses = 19           # number of guesses to guess goal
-            data = (b"The game has begun, you have %d guesses left" % guesses)
+            data = (b"The game has begun, you have 20 guesses left")
             connection.send(data)
             self.__connect(connection, goal, guesses)
 
@@ -51,8 +61,7 @@ class Server():
             if data == "/q":    # quit
                 self.__quit(connection)
                 break
-            data = bytes(data + ", you have %d guesses \
-            left" % guesses, 'utf-8')
+            data = bytes(data + ", you have %d guesses left" % guesses, 'utf-8')
             connection.sendall(data)
             guesses -= 1
 
@@ -67,9 +76,8 @@ class Server():
     def __serverWinner(self, connection):
         """server wins, client unable to guesss object in 20 guesses"""
         print("The client ran out of guesses you've won!")
-        data = b"You ran out of guesses, YOU LOST!"
+        data = b"You ran out of guesses, YOU LOST! /q"
         connection.send(data)
-        connection.send(b"/q")
         connection.close()
 
     def __quit(self, connection):

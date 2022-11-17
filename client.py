@@ -12,6 +12,14 @@ import socket
 
 class Client():
     """instance of client to interact with Server() class"""
+
+    def __init__(self):
+        self.instructions = "In this game the serverside decides on a person place thing or other" + "\n" + \
+                            "accepted target. The server enters this object when prompted to start the" + "\n" + \
+                            "game and it is the client sides job to guess what the thing is. The client can \n" + "\n" + \
+                            "ask up to 20 questions/guesses. When you think you know the answer enter it as \n" + "\n" + \
+                            "the only word without any punctuation."
+
     def client(self):
         """client connects to local host and same port as Server() then
         sends messages back and forth taking turns in a game of 20 questions"""
@@ -19,8 +27,10 @@ class Client():
         PORT = 16022                     # same as Server()
         connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         connection.connect((HOST, PORT))
-        print("Welcome to 20 questions, the server thought of a person place \
-        or thing and you need go guess!")
+        print("Welcome to 20 Questions!")
+        print(self.instructions)
+        print("The server side will think of a person place or thing and you need go guess!")
+        print("-----------------------------------------------------------------------")
         print("on your turn enter /q to quit")
         print("Opponent chosing something to guess.......")
         self.__connect(connection)
