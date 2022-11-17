@@ -1,7 +1,3 @@
-# Author: Devon Miller
-# Date: 11/25/2022
-# Course: CS 372
-# Assignment: Project 4: Client Server Chat
 # Description: This file holds the server portion of a client server chat program client and
 #               server send messages to each other over a single socket connection until one of
 #               the parties closes the chat
@@ -25,16 +21,17 @@ def server():
         goal = bytes(goal, 'utf-8')
         print("Lets begin!")
         print("on your turn enter /q to quit")
-        guesses = 19
+        guesses = 18
         data = (b"The game has begun, you have %d guesses left" % guesses)
         connection.send(data)
         while True:
             #print(f"Connected by {address}")
             response = connection.recv(1024)             # one recv is sufficient to read all data here
             print(response.decode())
-            if b"/q" in response:
+            if response == b"/q":
                 connection.close()
-            print(True, response, goal)
+                break
+            #print(True, response, goal)
             if response == goal:
                 print("The client won!")
                 data = b"Youre the winner great job!"
@@ -47,15 +44,15 @@ def server():
                 connection.send(data)
                 connection.send(b"/q")
                 connection.close()
-            data = input("(yes or no >>>>>>> ")
+            data = input(">>>>>>> ")
             #print(data)
-            #data = bytes(data + ", you have %d guesses left" % guesses, 'utf-8')
-            if "/q" in data:
-                print(True)
-                #data = bytes(data, 'utf-8')
-                connection.send(data)
+            print(data)
+            if data == "/q":
+                print(True, False, True)
+                connection.send(b"/q")
                 connection.close()
-            data = bytes(data + ", you have %d guesses left" % guesses, 'utf-8')
+                break
+            data = bytes(data + ", you have %d guesses left" % int(guesses+1), 'utf-8')
             connection.sendall(data)
             guesses -= 1
 
