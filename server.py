@@ -30,7 +30,7 @@ class Server():
             data = (b"The game has begun, you have %d guesses left" % guesses)
             connection.send(data)
             self.__connect(connection, goal, guesses)
-        ""
+
     def __connect(self, connection, goal, guesses):
         """A connection handled by server class, connection is the connection
         goal is the string to guess, guesses are the number of remaining
