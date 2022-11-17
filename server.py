@@ -32,7 +32,7 @@ def server():
             #print(f"Connected by {address}")
             response = connection.recv(1024)             # one recv is sufficient to read all data here
             print(response.decode())
-            if response == "/q":
+            if b"/q" in response:
                 connection.close()
             print(True, response, goal)
             if response == goal:
@@ -48,8 +48,11 @@ def server():
                 connection.send(b"/q")
                 connection.close()
             data = input("(yes or no >>>>>>> ")
-            print(data)
-            if data == b"/q":
+            #print(data)
+            #data = bytes(data + ", you have %d guesses left" % guesses, 'utf-8')
+            if "/q" in data:
+                print(True)
+                #data = bytes(data, 'utf-8')
                 connection.send(data)
                 connection.close()
             data = bytes(data + ", you have %d guesses left" % guesses, 'utf-8')

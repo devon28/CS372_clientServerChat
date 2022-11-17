@@ -23,11 +23,11 @@ def client():
     while True:
         response = connection.recv(1024)  # one recv is sufficient to read all data here
         print(response.decode())
-        if response == "/q":
+        if b"/q" in response:
             connection.close()
         data = input(">>> ")
         data = bytes(data, 'utf-8')
-        if data == b"/q":
+        if b"/q" in data:
             connection.send(data)
             connection.close()
         connection.sendall(data)  # data to display in browser
